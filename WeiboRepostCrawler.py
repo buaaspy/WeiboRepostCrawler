@@ -2,6 +2,7 @@
 
 from urllib2 import Request, urlopen
 import sys
+import os
 from useragent import UserAgent
 import time
 import random
@@ -16,36 +17,69 @@ my_cookie = "Cookie:SINAGLOBAL=4541295308154.076.1442142976789; _ga=GA1.2.126262
 my_cookie_1 = "Cookie:SINAGLOBAL=4541295308154.076.1442142976789; _ga=GA1.2.1262622540.1453001284; wb_feed_unfolded_1616175237=1; wvr=6; UOR=,,www.baidu.com; YF-V5-G0=2da76c0c227d473404dd0efbaccd41ac; YF-Ugrow-G0=4703aa1c27ac0c4bab8fc0fc5968141e; SUS=SID-1616175237-1456966788-GZ-uxv5i-1d54afa72b0310a39628f14f1277d866; SUE=es%3D71accd3879c90ced5cd058d6ee7bce8f%26ev%3Dv1%26es2%3D58e03124f01ace2dec3d9011505f6c18%26rs0%3DLJEBb1VUW7Sv1EAAmLRl10LfnGUj8zFeWb%252FaQq3Ty6hGFBJJmkjnWCyDQcSEiy3nLbH7qGDfdTZ9dA3NMHvjzXSCl8X6NHdbkYNq%252B8RGq74RizuOS7IXEvJ0qLMJtN7nfmSRfgeJq5DhsLvlcmFKDKE05UzPXGYbJySMBkZhiP4%253D%26rv%3D0; SUP=cv%3D1%26bt%3D1456966788%26et%3D1457053188%26d%3Dc909%26i%3Dd866%26us%3D1%26vf%3D0%26vt%3D0%26ac%3D0%26st%3D0%26uid%3D1616175237%26name%3Dnaspy1987%2540sina.com%26nick%3DCartman%26fmp%3D%26lcp%3D2015-08-26%252018%253A24%253A59; SUB=_2A2570_zUDeRxGedI6lQQ9yvOyDuIHXVYqWkcrDV8PUNbvtBeLWL6kW9LHetz4jz4S74t3R4iyURUQCJo7l4x9Q..; SUBP=0033WrSXqPxfM725Ws9jqgMF55529P9D9WWKbl2Hy.GTyyqPZLj8o6ew5JpX5KMt; SUHB=0BLp0Kwp2a8d8v; ALF=1488502787; SSOLoginState=1456966788; _s_tentry=-; Apache=7147445364389.568.1456973717946; ULV=1456973718315:126:4:6:7147445364389.568.1456973717946:1456916734294; TC-V5-G0=52dad2141fc02c292fc30606953e43ef"
 my_cookie_2 = "Cookie:SINAGLOBAL=4541295308154.076.1442142976789; wb_feed_unfolded_1616175237=1; wvr=6; YF-V5-G0=2da76c0c227d473404dd0efbaccd41ac; YF-Ugrow-G0=4703aa1c27ac0c4bab8fc0fc5968141e; _s_tentry=-; Apache=7147445364389.568.1456973717946; ULV=1456973718315:126:4:6:7147445364389.568.1456973717946:1456916734294; TC-V5-G0=52dad2141fc02c292fc30606953e43ef; YF-Page-G0=8ec35b246bb5b68c13549804abd380dc; TC-Page-G0=fd45e036f9ddd1e4f41a892898506007; TC-Ugrow-G0=370f21725a3b0b57d0baaf8dd6f16a18; _ga=GA1.2.1262622540.1453001284; crtg_rta=SIM300250A%3D1%3BSIM300250B%3D1%3BSIM300250C%3D1%3BSI72890%3D1%3BSI46860H%3D1%3BSI300250H%3D1%3BSI300100H%3D1%3BSI300600H%3D1%3BSIN300250T%3D1%3BSIN300100%3D1%3BSIN300250D%3D1%3BIV300600%3D1%2CIV300250S%3D1%2CIV300250L%3D1%2CIV300250R%3D1%2CIVM320100%3D1%3BWE72890%3D1%3BWE72890A%3D1%3BWE72890B%3D1%3BWE200200%3D1%3BWE336280%3D1%3BWE300600A%3D1%3BWE300600B%3D1%3BWE160600%3D1%3BWE300250M%3D1%3B; __gads=ID=dbab27bbaf5db300:T=1457013746:S=ALNI_Mba0bdEQVs0Wmjt3hFhz01pRx2hrg; WBStore=8b23cf4ec60a636c|undefined; UOR=,,www.baidu.com; SUS=SID-1616175237-1457054564-GZ-75ho9-f471c2b628ea700700589450379fd866; SUE=es%3D26e9143db19add81862cf464597c38f2%26ev%3Dv1%26es2%3D66826d08ebd7fd884e2eb74329e6b68a%26rs0%3DCLOeTGoRqnWO%252BbtdZnJuDl293RE7LgXkfXZ0k6CoXrN3vgSH3%252FkDhGmtOxTAmEGbl5amcARKj3ToGHyHJuvmEa6y3pvBejxMQru9N8%252Buy1%252FgijikHLy3KToIsZgSq5ykOV%252FXXjwoIvdQaYQ8DUkpHCHuTnvNVn%252FMu3YO74lcL%252BY%253D%26rv%3D0; SUP=cv%3D1%26bt%3D1457054564%26et%3D1457140964%26d%3Dc909%26i%3Dd866%26us%3D1%26vf%3D0%26vt%3D0%26ac%3D0%26st%3D0%26uid%3D1616175237%26name%3Dnaspy1987%2540sina.com%26nick%3DCartman%26fmp%3D%26lcp%3D2015-08-26%252018%253A24%253A59; SUB=_2A2573JM0DeRxGedI6lQQ9yvOyDuIHXVYq4P8rDV8PUNbvtBeLXP4kW9LHetbkUovn4X4dseO0J3FGzFCj-_VwQ..; SUBP=0033WrSXqPxfM725Ws9jqgMF55529P9D9WWKbl2Hy.GTyyqPZLj8o6ew5JpX5KMt; SUHB=0rr6CNIPJVC7vh; ALF=1488590564; SSOLoginState=1457054564"
 my_cookie_3 = "Cookie:SINAGLOBAL=4541295308154.076.1442142976789; wb_feed_unfolded_1616175237=1; wvr=6; YF-V5-G0=2da76c0c227d473404dd0efbaccd41ac; YF-Ugrow-G0=4703aa1c27ac0c4bab8fc0fc5968141e; _s_tentry=-; Apache=7147445364389.568.1456973717946; ULV=1456973718315:126:4:6:7147445364389.568.1456973717946:1456916734294; TC-V5-G0=52dad2141fc02c292fc30606953e43ef; YF-Page-G0=8ec35b246bb5b68c13549804abd380dc; TC-Page-G0=fd45e036f9ddd1e4f41a892898506007; TC-Ugrow-G0=370f21725a3b0b57d0baaf8dd6f16a18; _ga=GA1.2.1262622540.1453001284; crtg_rta=SIM300250A%3D1%3BSIM300250B%3D1%3BSIM300250C%3D1%3BSI72890%3D1%3BSI46860H%3D1%3BSI300250H%3D1%3BSI300100H%3D1%3BSI300600H%3D1%3BSIN300250T%3D1%3BSIN300100%3D1%3BSIN300250D%3D1%3BIV300600%3D1%2CIV300250S%3D1%2CIV300250L%3D1%2CIV300250R%3D1%2CIVM320100%3D1%3BWE72890%3D1%3BWE72890A%3D1%3BWE72890B%3D1%3BWE200200%3D1%3BWE336280%3D1%3BWE300600A%3D1%3BWE300600B%3D1%3BWE160600%3D1%3BWE300250M%3D1%3B; __gads=ID=dbab27bbaf5db300:T=1457013746:S=ALNI_Mba0bdEQVs0Wmjt3hFhz01pRx2hrg; WBStore=8b23cf4ec60a636c|undefined; wb_publish_fist100_1616175237=1; SUS=SID-1616175237-1457149872-GZ-y3ezp-f183dc70c8fb1bbbdc08ec46545ed866; SUE=es%3D2e0919cc574ff4009fa41e10968ed6e4%26ev%3Dv1%26es2%3D971d58ab04cb88b5de4602e86e2be451%26rs0%3DM4%252FC9tBCYYJDt7lFDufaXN9JtMR51bch6FSNlXzGnWk2GVqdelNX6Y87MMfWIZGfKgngAa1kuKbFAYNKU2DpridRiddLtiAWrf5611kLaJrjR9pW4J9kwq9iQDm%252BKAZZl%252F1ibSJ5O%252BAdoty1uRUCVHkpoKddcwoN4wRP9SSoShU%253D%26rv%3D0; SUP=cv%3D1%26bt%3D1457149872%26et%3D1457236272%26d%3Dc909%26i%3Dd866%26us%3D1%26vf%3D0%26vt%3D0%26ac%3D0%26st%3D0%26uid%3D1616175237%26name%3Dnaspy1987%2540sina.com%26nick%3DCartman%26fmp%3D%26lcp%3D2015-08-26%252018%253A24%253A59; SUB=_2A2573ifgDeRxGedI6lQQ9yvOyDuIHXVYqh4orDV8PUNbvtBeLXaikW9LHetm4rnTdEVU0U2jc84DFafel-op3w..; SUBP=0033WrSXqPxfM725Ws9jqgMF55529P9D9WWKbl2Hy.GTyyqPZLj8o6ew5JpX5KMt; SUHB=0KAwptesNcnifQ; ALF=1488685871; SSOLoginState=1457149872; UOR=,,login.sina.com.cn"
+my_cookie_4 = "Cookie:SINAGLOBAL=4541295308154.076.1442142976789; wb_feed_unfolded_1616175237=1; wvr=6; YF-V5-G0=2da76c0c227d473404dd0efbaccd41ac; YF-Ugrow-G0=4703aa1c27ac0c4bab8fc0fc5968141e; _s_tentry=-; Apache=7147445364389.568.1456973717946; ULV=1456973718315:126:4:6:7147445364389.568.1456973717946:1456916734294; TC-V5-G0=52dad2141fc02c292fc30606953e43ef; YF-Page-G0=8ec35b246bb5b68c13549804abd380dc; TC-Page-G0=fd45e036f9ddd1e4f41a892898506007; TC-Ugrow-G0=370f21725a3b0b57d0baaf8dd6f16a18; _ga=GA1.2.1262622540.1453001284; crtg_rta=SIM300250A%3D1%3BSIM300250B%3D1%3BSIM300250C%3D1%3BSI72890%3D1%3BSI46860H%3D1%3BSI300250H%3D1%3BSI300100H%3D1%3BSI300600H%3D1%3BSIN300250T%3D1%3BSIN300100%3D1%3BSIN300250D%3D1%3BIV300600%3D1%2CIV300250S%3D1%2CIV300250L%3D1%2CIV300250R%3D1%2CIVM320100%3D1%3BWE72890%3D1%3BWE72890A%3D1%3BWE72890B%3D1%3BWE200200%3D1%3BWE336280%3D1%3BWE300600A%3D1%3BWE300600B%3D1%3BWE160600%3D1%3BWE300250M%3D1%3B; __gads=ID=dbab27bbaf5db300:T=1457013746:S=ALNI_Mba0bdEQVs0Wmjt3hFhz01pRx2hrg; WBStore=8b23cf4ec60a636c|undefined; wb_publish_fist100_1616175237=1; SUS=SID-1616175237-1457149872-GZ-y3ezp-f183dc70c8fb1bbbdc08ec46545ed866; SUE=es%3D2e0919cc574ff4009fa41e10968ed6e4%26ev%3Dv1%26es2%3D971d58ab04cb88b5de4602e86e2be451%26rs0%3DM4%252FC9tBCYYJDt7lFDufaXN9JtMR51bch6FSNlXzGnWk2GVqdelNX6Y87MMfWIZGfKgngAa1kuKbFAYNKU2DpridRiddLtiAWrf5611kLaJrjR9pW4J9kwq9iQDm%252BKAZZl%252F1ibSJ5O%252BAdoty1uRUCVHkpoKddcwoN4wRP9SSoShU%253D%26rv%3D0; SUP=cv%3D1%26bt%3D1457149872%26et%3D1457236272%26d%3Dc909%26i%3Dd866%26us%3D1%26vf%3D0%26vt%3D0%26ac%3D0%26st%3D0%26uid%3D1616175237%26name%3Dnaspy1987%2540sina.com%26nick%3DCartman%26fmp%3D%26lcp%3D2015-08-26%252018%253A24%253A59; SUB=_2A2573ifgDeRxGedI6lQQ9yvOyDuIHXVYqh4orDV8PUNbvtBeLXaikW9LHetm4rnTdEVU0U2jc84DFafel-op3w..; SUBP=0033WrSXqPxfM725Ws9jqgMF55529P9D9WWKbl2Hy.GTyyqPZLj8o6ew5JpX5KMt; SUHB=0KAwptesNcnifQ; ALF=1488685871; SSOLoginState=1457149872; UOR=,,www.pythontab.com"
+
+ISOTIMEFORMAT = '%Y_%m_%d_%H_%M_%S'
+log_path_suffix = ".txt"
+
+
+def get_current_layer():
+    return 7
+
+
+def get_current_layer_recheck_log_path():
+    recheck_log_path = "./cleanroom/alpha/layer" + str(get_current_layer()) + "/recheck/"
+    if not os.path.exists(recheck_log_path):
+        os.makedirs(recheck_log_path)
+
+    return recheck_log_path + "log.txt"
+
+
+def get_current_layer_crawler_data_path():
+    data_path = "./dat" + str(get_current_layer()) + "/"
+    if not os.path.exists(data_path):
+        os.makedirs(data_path)
+
+    return data_path
+
+
+def get_current_layer_ops_log_path():
+    ops_log_path = "./dat" + str(get_current_layer()) + "/"
+    if not os.path.exists(ops_log_path):
+        os.makedirs(ops_log_path)
+
+    return ops_log_path + "ops.log"
+
 
 def get_request_url(mid, page):
     return prefix + str(mid) + infix + str(page)
 
-def worker(root_id, mid, page, useragent, ops):
-    data_path_prefix = "./dat4/" + str(root_id) + "_"
-    log_path_suffix = ".txt"
-    ISOTIMEFORMAT='%Y_%m_%d_%H_%M_%S'
-    absl_data_path = data_path_prefix + str(page) + "_" + str(time.strftime(ISOTIMEFORMAT))  + log_path_suffix
 
+def worker(root_id, mid, page, useragent, ops):
+    data_path_prefix = get_current_layer_crawler_data_path() + str(root_id) + "_"
+    absl_data_path = data_path_prefix + str(page) + "_" + str(time.strftime(ISOTIMEFORMAT)) + log_path_suffix
     request_url = get_request_url(mid, page)
 
     print("request %s" % request_url)
 
     dat = open(absl_data_path, "a")
 
-    resource = Request(request_url, None, {'User-Agent' : useragent.get_spider_useragent(), 'cookie' : my_cookie_3})
+    resource = Request(request_url, None, {'User-Agent': useragent.get_spider_useragent(), 'cookie': my_cookie_4})
     response = urlopen(resource)
     data = response.read()
     print("[worker] %s" % data[0:50])
-    ops.write("[worker] %s" % data[0:50])
+    ops.write("[worker] %s\n" % data[0:50])
     dat.write(data)
 
     dat.close()
 
+
 def unicodetochinese(raw_str):
     return raw_str.decode('unicode_escape')
 
+
 def get_random_wait_time():
-    index = random.randint( 1,  3)
+    index = random.randint(1, 3)
     if index == 1:
         return 0.5
     elif index == 2:
@@ -53,27 +87,32 @@ def get_random_wait_time():
     elif index == 3:
         return 1
 
-def scheduler(root_id, mid, total_page, total_process_cnt):
+
+def scheduler(root_id, mid, total_page, total_process_cnt, recheck_log):
     useragent = UserAgent()
-    ops_log_path = "./dat4/ops.log"
+    ops_log_path = get_current_layer_ops_log_path()
     ops = open(ops_log_path, "a")
 
     for r in range(total_page, 0, -1):
         try:
-            ops.write("[scheduler] fetch %d" % r)
+            ops.write("[scheduler] fetch %d\n" % r)
             print("[scheduler] fetch %d [%d] [%d]" % (r, total_page, total_process_cnt))
 
             worker(root_id, mid, r, useragent, ops)
 
             fetch_wait_time = float(get_random_wait_time())
-            ops.write("[scheduler] wait %f seconds" % fetch_wait_time)
+            ops.write("[scheduler] wait %f seconds\n" % fetch_wait_time)
             print("[scheduler] wait %f seconds" % fetch_wait_time)
             time.sleep(fetch_wait_time)
         except:
             print("[scheduler] failed to fetch html content !!!")
             print sys.exc_info()
+            recheck_log.write("[scheduler] %s %s %s %s %s\n" % (
+                str(time.strftime(ISOTIMEFORMAT)), root_id, mid, str(r), str(total_process_cnt)))
+            print("[scheduler] write into recheck log !!!")
 
     ops.close()
+
 
 def determine_page_num(retweet_num):
     if int(retweet_num) % 20 == 0:
@@ -81,12 +120,16 @@ def determine_page_num(retweet_num):
     else:
         return int(retweet_num) / 20 + 1
 
+
 def main(resume_skip):
     try:
-        dat = open("./cleanroom/alpha/layer3/2016_03_04_13_00_02.txt", 'r')
+        dat = open("./cleanroom/alpha/layer6/2016_03_06_01_05_06.txt", 'r')
+        recheck_file = open(get_current_layer_recheck_log_path(), 'a')
+
         skip_threshold = int(resume_skip)
         skip = 1
         total_process_cnt = 1
+
         try:
             line = dat.readline()
             print line
@@ -110,7 +153,7 @@ def main(resume_skip):
                 root_id = line.split(' ')[4]
 
                 print("[main] %s %s %s" % (root_id.strip('\n'), mid.strip('\n'), total_page))
-                scheduler(root_id.strip('\n'), mid.strip('\n'), total_page, total_process_cnt)
+                scheduler(root_id.strip('\n'), mid.strip('\n'), total_page, total_process_cnt, recheck_file)
 
                 total_process_cnt += 1
                 line = dat.readline()
@@ -119,6 +162,7 @@ def main(resume_skip):
             print sys.exc_info()
         finally:
             dat.close()
+            recheck_file.close()
     except:
         print("[main] exception!!!")
         print sys.exc_info()
@@ -127,4 +171,4 @@ def main(resume_skip):
 ########################################################################################################################
 # main entry
 ########################################################################################################################
-main(182249)
+main(12981)
