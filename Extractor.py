@@ -22,13 +22,14 @@ class WeiboExtract:
             """
 
     def __init__(self):
-        self.data_root_path = "./dat4/"
-        self.out_root_path = "./cleanroom/alpha/layer4/"
+        self.data_root_path = "./dat6/"
+        self.out_root_path = "./cleanroom/alpha/layer6/"
         self.parse_microblog_warning = 0
         self.parse_microblog_warning_threshold = 100
         self.parse_html_warning = 0
         self.parse_html_warning_threshold = 100
         self.isotimeformat = '%Y_%m_%d_%H_%M_%S'
+        self.microblog_dic = {}
 
     def unicodetochinese(self, raw_str):
         return raw_str.decode('unicode_escape')
@@ -120,8 +121,12 @@ class WeiboExtract:
                     like = self.unicodetochinese(like_em_node.get_text())
 
                     print("%s %s %s %s %s %s %s %s %s" % (filename, date, mid, owner_id, uid, name, con, feed_forward, like))
-                    retweet = date + " " + mid + " " + owner_id + " " + uid + " " + name + " " + con + " " + feed_forward + " " + like
-                    one_page_content.append(retweet)
+                    key = date + mid + owner_id + uid
+                    if key not in self.microblog_dic:
+                        retweet = date + " " + mid + " " + owner_id + " " + uid + " " + name + " " + con + " " + feed_forward + " " + like
+                        one_page_content.append(retweet)
+                        self.microblog_dic[key] = 1
+
                 except:
                     print("[extractor] WARNING !!! fail to parse content !!!")
                     print sys.exc_info()
